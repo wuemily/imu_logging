@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'imu_logging = imu_logger.imu_logging:main',
+            'imu_logging = imu_logging.imu_logging:main',
         ],
     },
 )

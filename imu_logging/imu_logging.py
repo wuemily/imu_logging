@@ -12,12 +12,12 @@ class ImuLogger(Node):
         self.subscription
 
     def logger_callback(self, msg):
-        self.get_logger().info('Angular Velocity x: "%d"' % msg.data.angular_velocity.x)
-        if (msg.data.angular_acceleration.x > 5.0) :
+        self.get_logger().info('Angular Velocity x: "%d"' % msg.angular_velocity.x)
+        if (msg.angular_velocity.x > 5.0) :
             self.get_logger().info('Sudden acceleration in x')
-        if (msg.data.angular_acceleration.y > 5.0) :
+        if (msg.angular_velocity.y > 5.0) :
             self.get_logger().info('Sudden acceleration in y')
-        if (msg.data.angular_acceleration.z > 5.0) :
+        if (msg.angular_velocity.z > 5.0) :
             self.get_logger().info('Sudden acceleration in z')
             
 
