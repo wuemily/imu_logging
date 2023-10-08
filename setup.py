@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'talker = imu_logger.publisher_member_function:main',
+            'imu_logging = imu_logger.imu_logging:main',
         ],
     },
 )
