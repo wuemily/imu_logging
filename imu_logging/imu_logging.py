@@ -8,7 +8,7 @@ class ImuLogger(Node):
 
     def __init__(self):
         super().__init__('imu_logger')
-        self.subscription = self.create_subscription(String, 'bno055/imu_raw', self.logger_callback, 10)
+        self.subscription = self.create_subscription(Imu, 'bno055/imu_raw', self.logger_callback, 10)
         self.subscription
 
     def logger_callback(self, msg):
