@@ -13,6 +13,7 @@ class ImuLogger(Node):
         self.prev_accel_z = 0.0
         self.start_time = 0.0
         self.first_msg_received = False
+        self.prev_not_upright = False
         self.subscription = self.create_subscription(Imu, 'bno055/imu_raw', self.logger_callback, 10)
         self.subscription
 
@@ -20,6 +21,7 @@ class ImuLogger(Node):
         if not self.first_msg_received :
             self.start_time = self.get_clock().now()
             self.first_msg_received = True
+        
         
         # Print orientation
         # self.get_logger().info(f'Orientation (x, y, z): ({msg.orientation.x}, {msg.orientation.y}, {msg.orientation.z})', throttle_duration_sec=10)
@@ -29,18 +31,29 @@ class ImuLogger(Node):
         self.get_logger().info(f'Linear Velocity (x, y, z): ({msg.orientation.x}, {msg.orientation.y}, {msg.orientation.z})', throttle_duration_sec=2)
 
         # Sudden acceleration
-        if (msg.linear_acceleration.x > 5.0) :
+        if (abs(msg.linear_acceleration.x - self.prev_accel_x) > 5.0) :
             self.get_logger().error('Sudden acceleration in x')
-        if (msg.linear_acceleration.y > 5.0) :
+        if (abs(msg.linear_acceleration.y - self.prev_accel_y) > 5.0) :
             self.get_logger().error('Sudden acceleration in y')
-        if (msg.linear_acceleration.z > 5.0) :
+        if (abs(msg.linear_acceleration.z - self.prev_accel_z) > 5.0) :
             self.get_logger().error('Sudden acceleration in z')
+
+        # Update prev accel
+        self.prev_accel_x = msg.linear_acceleration.x
+        self.prev_accel_y = msg.linear_acceleration.y
+        self.prev_accel_z = msg.linear_acceleration.z
+
+        if (msg.linear_acceleration.z >= 8.0 and self.prev_not_upright) :
+            self.get_logger().error('IMU returned to upright position', once=True)
 
         # IMU upside down; maybe use quaternion??
         if (msg.linear_acceleration.z < 8.0 and msg.linear_acceleration.z > 0.0) : 
-            self.get_logger().error('IMU is not upright')
+            self.prev_not_upright = True
+            self.get_logger().error('IMU is not upright', once=True)
         elif (msg.linear_acceleration.z < 0.0) :
-            self.get_logger().error('IMU is upside down')
+            self.prev_not_upright = True
+            self.get_logger().error('IMU is upside down', once=True)
+
 
 def main(args=None):
     rclpy.init(args=args)
