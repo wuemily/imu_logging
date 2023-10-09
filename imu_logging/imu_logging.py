@@ -37,9 +37,9 @@ class ImuLogger(Node):
             self.get_logger().error('Sudden acceleration in z')
 
         # IMU upside down; maybe use quaternion??
-        if (msg.linear_acceleration.z < 8 & msg.linear_acceleration.z > 0) : 
+        if (msg.linear_acceleration.z < 8.0 & msg.linear_acceleration.z > 0.0) : 
             self.get_logger().error('IMU is not upright')
-        elif (msg.linear_acceleration.z < 0) :
+        elif (msg.linear_acceleration.z < 0.0) :
             self.get_logger().error('IMU is upside down')
 
 def main(args=None):
