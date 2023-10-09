@@ -17,9 +17,9 @@ class ImuLogger(Node):
         self.subscription
 
     def logger_callback(self, msg):
-        if not first_msg_received :
-            start_time = self.get_clock().now()
-            first_msg_received = True
+        if not self.first_msg_received :
+            self.start_time = self.get_clock().now()
+            self.first_msg_received = True
         
         # Print orientation
         # self.get_logger().info(f'Orientation (x, y, z): ({msg.orientation.x}, {msg.orientation.y}, {msg.orientation.z})', throttle_duration_sec=10)
