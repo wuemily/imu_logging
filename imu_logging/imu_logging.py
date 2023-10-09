@@ -28,7 +28,7 @@ class ImuLogger(Node):
         # self.get_logger().info('Angular Velocity x: "%d"' % msg.angular_velocity.x, throttle_duration_sec=10)
 
         # Print linear velocity
-        self.get_logger().info(f'Linear Velocity (x, y, z): ({msg.orientation.x}, {msg.orientation.y}, {msg.orientation.z})', throttle_duration_sec=2)
+        self.get_logger().info(f'Linear Velocity (x, y, z): ({msg.orientation.x}, {msg.orientation.y}, {msg.orientation.z})', throttle_duration_sec=5)
 
         # Sudden acceleration
         if (abs(msg.linear_acceleration.x - self.prev_accel_x) > 5.0) :
@@ -48,12 +48,12 @@ class ImuLogger(Node):
             self.get_logger().error('IMU returned to upright position')
 
         # IMU upside down; maybe use quaternion??
-        if (msg.linear_acceleration.z < 8.0 and msg.linear_acceleration.z > 0.0) : 
+        if (msg.linear_acceleration.z < 8.0 and msg.linear_acceleration.z > 0.0) :
             self.prev_not_upright = True
-            self.get_logger().error('IMU is not upright', once=True)
+            self.get_logger().error('IMU is not upright', throttle_duration_sec=5)
         elif (msg.linear_acceleration.z < 0.0) :
             self.prev_not_upright = True
-            self.get_logger().error('IMU is upside down', once=True)
+            self.get_logger().error('IMU is upside down', throttle_duration_sec=5)
 
 
 def main(args=None):
