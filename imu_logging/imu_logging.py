@@ -12,7 +12,12 @@ class ImuLogger(Node):
         self.subscription
 
     def logger_callback(self, msg):
-        self.get_logger().info('Angular Velocity x: "%d"' % msg.angular_velocity.x)
+        # num = 4
+        self.get_logger().error('Orientation (x, y, z): ("%d", "%d", "%d")' % msg.orientation.x, msg.orientation.y, msg.orientation.z, throttle_duration_sec=10)
+        
+        self.get_logger().error('Angular Velocity x: "%d"' % msg.angular_velocity.x, throttle_duration_sec=10)
+
+        # self.get_logger().info('Angular Velocity x: "%d"' % msg.angular_velocity.x)
         if (msg.angular_velocity.x > 5.0) :
             self.get_logger().info('Sudden acceleration in x')
         if (msg.angular_velocity.y > 5.0) :
