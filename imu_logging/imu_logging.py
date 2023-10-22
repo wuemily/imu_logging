@@ -11,7 +11,7 @@ class ImuLogger(Node):
         self.old_x = 0.0 #initally orientation is 0
         self.old_y = 0.0
         self.old_z = 0.0
-        self.prev_time = 0.0
+        self.prev_time = self.get_clock().now()
         self.prev_accel_x = -9.8
         self.prev_accel_y = 0.0
         self.prev_accel_z = 0.0
@@ -41,6 +41,7 @@ class ImuLogger(Node):
         self.old_z = msg.orientation.z
         self.prev_time = self.get_clock().now()
 
+        # what is the unit of velocity?? 
         self.get_logger().info(f'Linear Velocity (x, y, z): ({vel_x}, {vel_y}, {vel_z})', skip_first=True, throttle_duration_sec=5)
 
         # Sudden acceleration
