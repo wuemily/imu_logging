@@ -11,7 +11,7 @@ class ImuLogger(Node):
         self.old_x = 0.0 #initally orientation is 0
         self.old_y = 0.0
         self.old_z = 0.0
-        self.prev_time = self.get_clock().now()
+        self.prev_time = self.get_clock().now().seconds_nanoseconds()
         self.prev_accel_x = -9.8
         self.prev_accel_y = 0.0
         self.prev_accel_z = 0.0
@@ -31,7 +31,7 @@ class ImuLogger(Node):
         # self.get_logger().info('Angular Velocity x: "%d"' % msg.angular_velocity.x, throttle_duration_sec=10)
 
         # Print linear velocity periodically
-        delta_t = self.get_clock().now() - self.prev_time
+        delta_t = self.get_clock().now().seconds_nanoseconds()[0] - self.prev_time[0] #only consider seconds?
         vel_x = (msg.orientation.x - self.old_x) / delta_t
         vel_y = (msg.orientation.y - self.old_y) / delta_t
         vel_z = (msg.orientation.z - self.old_z) / delta_t
@@ -39,7 +39,7 @@ class ImuLogger(Node):
         self.old_x = msg.orientation.x #update old values
         self.old_y = msg.orientation.y
         self.old_z = msg.orientation.z
-        self.prev_time = self.get_clock().now()
+        self.prev_time = self.get_clock().now().seconds_nanoseconds()
 
         # what is the unit of velocity?? 
         self.get_logger().info(f'Linear Velocity (x, y, z): ({vel_x}, {vel_y}, {vel_z})', skip_first=True, throttle_duration_sec=5)
