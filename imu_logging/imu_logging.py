@@ -32,14 +32,14 @@ class ImuLogger(Node):
 
         # Print linear velocity every 5 seconds
         delta_t = (self.get_clock().now().seconds_nanoseconds()[0] - self.prev_time[0]) + 0.000000001 * (self.get_clock().now().seconds_nanoseconds()[1] - self.prev_time[1])
+        if delta_t > 5 :
+            self.old_x = msg.orientation.x #update old values
+            self.old_y = msg.orientation.y
+            self.old_z = msg.orientation.z
+            self.prev_time = self.get_clock().now().seconds_nanoseconds()
         vel_x = (msg.orientation.x - self.old_x) / delta_t
         vel_y = (msg.orientation.y - self.old_y) / delta_t
-        vel_z = (msg.orientation.z - self.old_z) / delta_t
-
-        self.old_x = msg.orientation.x #update old values
-        self.old_y = msg.orientation.y
-        self.old_z = msg.orientation.z
-        self.prev_time = self.get_clock().now().seconds_nanoseconds()
+        vel_z = (msg.orientation.z - self.old_z) / delta_t #printing all 0 as it is in meters per second ?
 
         # what is the unit of velocity?? 
         self.get_logger().info(f'Linear Velocity (x, y, z): ({vel_x}, {vel_y}, {vel_z})', skip_first=True, throttle_duration_sec=5)
