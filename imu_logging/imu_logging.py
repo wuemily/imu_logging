@@ -30,8 +30,8 @@ class ImuLogger(Node):
         # self.get_logger().info(f'Orientation (x, y, z): ({msg.orientation.x}, {msg.orientation.y}, {msg.orientation.z})', throttle_duration_sec=10)
         # self.get_logger().info('Angular Velocity x: "%d"' % msg.angular_velocity.x, throttle_duration_sec=10)
 
-        # Print linear velocity periodically
-        delta_t = self.get_clock().now().seconds_nanoseconds()[0] - self.prev_time[0] #only consider seconds?
+        # Print linear velocity every 5 seconds
+        delta_t = (self.get_clock().now().seconds_nanoseconds()[0] - self.prev_time[0]) + 0.000000001 * (self.get_clock().now().seconds_nanoseconds()[1] - self.prev_time[1])
         vel_x = (msg.orientation.x - self.old_x) / delta_t
         vel_y = (msg.orientation.y - self.old_y) / delta_t
         vel_z = (msg.orientation.z - self.old_z) / delta_t
